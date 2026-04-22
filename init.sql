@@ -1,12 +1,35 @@
-CREATE TABLE etudiants (
-    id SERIAL PRIMARY KEY,
-    data JSONB NOT NULL
+DROP TABLE IF EXISTS VENTE;
+DROP TABLE IF EXISTS APPARTEMENT;
+DROP TABLE IF EXISTS IMMEUBLE;
+DROP TABLE IF EXISTS CLIENT;
+
+CREATE TABLE CLIENT (
+    IdClient SERIAL PRIMARY KEY,
+    Nom TEXT,
+    Telephone TEXT
 );
 
-CREATE INDEX idx_etudiants_data
-ON etudiants USING GIN (data);
+CREATE TABLE IMMEUBLE (
+    IdImmeuble SERIAL PRIMARY KEY,
+    Adresse TEXT,
+    Ville TEXT
+);
 
-INSERT INTO etudiants (data) VALUES
-('{"nom": "Alice", "age": 25, "competences": ["Python", "Docker"]}'),
-('{"nom": "Bob", "age": 22, "competences": ["Java", "SQL"]}'),
-('{"nom": "Charlie", "age": 30, "competences": ["Linux", "Bash", "Python"]}');
+CREATE TABLE APPARTEMENT (
+    IdAppartement SERIAL PRIMARY KEY,
+    NumAppartement INT,
+    Surface FLOAT,
+    Prix FLOAT,
+    IdImmeuble INT REFERENCES IMMEUBLE(IdImmeuble)
+);
+
+CREATE TABLE VENTE (
+    IdVente SERIAL PRIMARY KEY,
+    DateVente DATE,
+    IdClient INT REFERENCES CLIENT(IdClient),
+    IdAppartement INT REFERENCES APPARTEMENT(IdAppartement)
+);
+
+INSERT INTO CLIENT (Nom, Telephone) VALUES
+('Alice', '111111'),
+('Bob', '222222');
